@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PixelCanvas from "@/components/pixel-canvas"
 import ComponentSelector from "@/components/component-selector"
 import { characterParts } from "@/lib/character-parts"
+import { trackNFTDownload, trackRandomize, trackCustomization } from "@/lib/analytics"
 
 export default function PixelArtGenerator() {
   const [selectedParts, setSelectedParts] = useState({
@@ -20,20 +21,24 @@ export default function PixelArtGenerator() {
     item: 0,
   })
 
-  const [pixelSize, setPixelSize] = useState(8)
+  const [downloadSize, setDownloadSize] = useState(8)
   const [activeTab, setActiveTab] = useState("preview")
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Generate a random character
   const randomizeCharacter = () => {
-    setSelectedParts({
-      hair: Math.floor(Math.random() * 5),
-      face: Math.floor(Math.random() * 5),
-      neck: Math.floor(Math.random() * 5),
-      clothing: Math.floor(Math.random() * 5),
-      hands: Math.floor(Math.random() * 5),
-      item: Math.floor(Math.random() * 5),
-    })
+    const newParts = {
+      hair: Math.floor(Math.random() * 10),
+      face: Math.floor(Math.random() * 10),
+      neck: Math.floor(Math.random() * 10),
+      clothing: Math.floor(Math.random() * 10),
+      hands: Math.floor(Math.random() * 10),
+      item: Math.floor(Math.random() * 10),
+    }
+    setSelectedParts(newParts)
+    
+    // Track randomize event
+    trackRandomize()
   }
 
   // Reset to default character
@@ -52,10 +57,26 @@ export default function PixelArtGenerator() {
   const downloadNFT = () => {
     if (!canvasRef.current) return
 
+    const characterDNA = `${selectedParts.hair}-${selectedParts.face}-${selectedParts.neck}-${selectedParts.clothing}-${selectedParts.hands}-${selectedParts.item}`
+    
     const link = document.createElement("a")
     link.download = `pixel-nft-${Date.now()}.png`
     link.href = canvasRef.current.toDataURL("image/png")
     link.click()
+    
+    // Track download event
+    trackNFTDownload(characterDNA)
+  }
+
+  // Handle part customization with analytics
+  const handlePartChange = (partKey: string, value: number) => {
+    setSelectedParts((prev) => ({
+      ...prev,
+      [partKey]: value,
+    }))
+    
+    // Track customization event
+    trackCustomization(partKey, value)
   }
 
   // Initialize with a random character
@@ -68,43 +89,55 @@ export default function PixelArtGenerator() {
       {/* Left panel - Controls */}
       <div className="lg:col-span-1 bg-gray-800 p-4 rounded-lg">
         <div className="mb-6">
-          <h2 className="text-xl font-bold mb-3 text-green-400">Pixel Size</h2>
+          <h2 className="text-xl font-bold mb-3 text-green-400">Download Image Size</h2>
           <div className="flex items-center gap-4">
             <Slider
-              value={[pixelSize]}
+              value={[downloadSize]}
               min={4}
-              max={12}
+              max={16}
               step={1}
-              onValueChange={(value) => setPixelSize(value[0])}
-              className="flex-1"
+              onValueChange={(value) => setDownloadSize(value[0])}
+              className="flex-1 hover:opacity-80 transition-opacity duration-200 cursor-pointer"
             />
-            <span className="text-sm font-mono bg-gray-700 px-2 py-1 rounded">{pixelSize}px</span>
+            <span className="text-sm font-mono bg-gray-700 px-2 py-1 rounded">
+              {downloadSize * 32}×{downloadSize * 32}px
+            </span>
           </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full mb-4">
-            <TabsTrigger value="preview" className="flex-1">
+            <TabsTrigger value="preview" className="flex-1 cursor-pointer">
               Preview
             </TabsTrigger>
-            <TabsTrigger value="customize" className="flex-1">
+            <TabsTrigger value="customize" className="flex-1 cursor-pointer">
               Customize
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="preview" className="space-y-4">
             <div className="flex gap-2">
-              <Button onClick={randomizeCharacter} className="flex-1 bg-green-600 hover:bg-green-700">
+              <Button 
+                onClick={randomizeCharacter} 
+                className="flex-1 bg-green-600 hover:bg-green-700 cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              >
                 <Shuffle className="mr-2 h-4 w-4" />
                 Randomize
               </Button>
-              <Button onClick={resetCharacter} variant="outline" className="flex-1 text-black">
+              <Button 
+                onClick={resetCharacter} 
+                variant="outline" 
+                className="flex-1 text-black hover:bg-gray-100 cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 Reset
               </Button>
             </div>
 
-            <Button onClick={downloadNFT} className="w-full bg-purple-600 hover:bg-purple-700">
+            <Button 
+              onClick={downloadNFT} 
+              className="w-full bg-purple-600 hover:bg-purple-700 cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <Download className="mr-2 h-4 w-4" />
               Download NFT
             </Button>
@@ -118,31 +151,34 @@ export default function PixelArtGenerator() {
           </TabsContent>
 
           <TabsContent value="customize" className="space-y-4">
-            {Object.entries(characterParts).map(([partKey, partData]) => (
-              <div key={partKey} className="mb-4">
-                <h3 className="text-md font-semibold mb-2 capitalize">{partKey}</h3>
-                <Select
-                  value={selectedParts[partKey as keyof typeof selectedParts].toString()}
-                  onValueChange={(value) => {
-                    setSelectedParts((prev) => ({
-                      ...prev,
-                      [partKey]: Number.parseInt(value),
-                    }))
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={`Select ${partKey} style`} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <SelectItem key={i} value={i.toString()}>
-                        Style {i + 1}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ))}
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(characterParts).map(([partKey]) => (
+                <div key={partKey} className="mb-2">
+                  <h3 className="text-md font-semibold mb-2 capitalize text-green-400">{partKey}</h3>
+                  <Select
+                    value={selectedParts[partKey as keyof typeof selectedParts].toString()}
+                    onValueChange={(value) => {
+                      handlePartChange(partKey, Number.parseInt(value))
+                    }}
+                  >
+                    <SelectTrigger className="hover:bg-gray-700 transition-colors duration-200">
+                      <SelectValue placeholder={`Select ${partKey} style`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 10 }, (_, i) => (
+                        <SelectItem 
+                          key={i} 
+                          value={i.toString()}
+                          className="hover:bg-gray-600 transition-colors duration-200"
+                        >
+                          Style {i + 1}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
@@ -153,21 +189,18 @@ export default function PixelArtGenerator() {
           <h2 className="text-xl font-bold mb-4 text-green-400">NFT Preview</h2>
           <div className="flex justify-center">
             <div className="relative bg-white p-4 rounded-lg border-2 border-gray-700">
-              <PixelCanvas ref={canvasRef} selectedParts={selectedParts} pixelSize={pixelSize} />
+              <PixelCanvas ref={canvasRef} selectedParts={selectedParts} pixelSize={downloadSize} />
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-3 md:grid-cols-6 gap-2">
-            {Object.entries(characterParts).map(([partKey, partData]) => (
+            {Object.entries(characterParts).map(([partKey]) => (
               <ComponentSelector
                 key={partKey}
                 partKey={partKey as keyof typeof selectedParts}
                 selectedIndex={selectedParts[partKey as keyof typeof selectedParts]}
                 onChange={(index) => {
-                  setSelectedParts((prev) => ({
-                    ...prev,
-                    [partKey]: index,
-                  }))
+                  handlePartChange(partKey, index)
                 }}
               />
             ))}

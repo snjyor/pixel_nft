@@ -36,8 +36,8 @@ export default function ComponentSelector({ partKey, selectedIndex, onChange }: 
 
   return (
     <div
-      className={`cursor-pointer p-1 rounded-md ${partKey === "background" ? "col-span-2" : ""}`}
-      onClick={() => onChange((selectedIndex + 1) % 5)}
+      className="cursor-pointer p-1 rounded-md"
+      onClick={() => onChange((selectedIndex + 1) % 10)}
     >
       <div className="text-xs text-center mb-1 capitalize">{partKey}</div>
       <div className="bg-gray-900 rounded-md p-1 flex justify-center">
