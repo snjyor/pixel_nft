@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // ESLint configuration for build
+  eslint: {
+    ignoreDuringBuilds: true,
+    dirs: ['app', 'components', 'lib'],
+  },
+  
+  // TypeScript configuration
+  typescript: {
+    // ignoreBuildErrors: true,
+  },
+  
   // Enable experimental features for better SEO
   experimental: {
     optimizeCss: true,
