@@ -145,32 +145,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mb-6">
-              <p className="text-sm text-gray-400 mb-4">Connect with us:</p>
-              <div className="flex justify-center items-center gap-6">
-                <a 
-                  href="https://twitter.com/intent/follow?screen_name=jinghui30" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-all duration-200 hover:scale-110 group"
-                  aria-label="Follow us on Twitter"
-                >
-                  <XIcon className="w-5 h-5 group-hover:animate-pulse" />
-                  <span className="text-sm font-medium">Twitter</span>
-                </a>
-                <a 
-                  href="https://github.com/snjyor/pixel_nft" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-all duration-200 hover:scale-110 group"
-                  aria-label="View source code on GitHub"
-                >
-                  <Github className="w-5 h-5 group-hover:animate-pulse" />
-                  <span className="text-sm font-medium">GitHub</span>
-                </a>
-              </div>
-            </div>
-
             <div className="text-xs text-gray-500 border-t border-gray-700 pt-4">
               <p>&copy; 2025 Pixel Art NFT Generator. All rights reserved.</p>
               <p className="mt-1">

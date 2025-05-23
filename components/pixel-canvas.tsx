@@ -47,7 +47,7 @@ const PixelCanvas = forwardRef<HTMLCanvasElement, PixelCanvasProps>(({ selectedP
         ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
       })
     })
-  }, [selectedParts, pixelSize, ref])
+  }, [selectedParts, pixelSize, canvasSize, ref])
 
   return (
     <canvas

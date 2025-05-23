@@ -92,7 +92,11 @@ export const metadata: Metadata = {
 // Global type declarations for Google Analytics
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (
+      command: 'config' | 'event' | 'js',
+      targetId: string | Date,
+      config?: Record<string, unknown>
+    ) => void;
   }
 }
 

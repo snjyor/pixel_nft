@@ -32,7 +32,7 @@ export default function ComponentSelector({ partKey, selectedIndex, onChange }: 
       ctx.fillStyle = color
       ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
     })
-  }, [partKey, selectedIndex])
+  }, [partKey, selectedIndex, canvasSize, pixelSize])
 
   return (
     <div
