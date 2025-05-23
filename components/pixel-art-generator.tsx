@@ -204,7 +204,7 @@ export default function PixelArtGenerator() {
               <span className="font-medium">Twitter</span>
             </a>
             <a 
-              href="https://github.com/snjyor/pixel_nft" 
+              href="https://github.com/snjyor" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-all duration-200 hover:scale-110 group text-xs"
