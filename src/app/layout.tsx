@@ -18,26 +18,29 @@ const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID
 
 export const metadata: Metadata = {
   title: {
-    default: "Pixel Art NFT Generator - Create Unique 8-bit Characters",
-    template: "%s | Pixel Art NFT Generator"
+    default: "Open Source Avatar Library - Free Pixel Art Avatar Generator",
+    template: "%s | Open Avatar Library"
   },
-  description: "Create stunning pixel art NFT characters with 1 million unique combinations. Free online pixel art generator with customizable parts, instant download, and professional quality output.",
+  description: "Free and open source pixel art avatar library with customizable characters. Generate unique 8-bit style avatars for your projects, games, and applications. MIT licensed and developer-friendly.",
   keywords: [
-    "pixel art generator",
-    "NFT creator",
-    "8-bit art generator",
-    "pixel character creator",
-    "digital art generator",
-    "retro game art",
-    "pixel art maker",
-    "NFT art generator",
-    "crypto art",
-    "blockchain art",
-    "pixel art NFT",
-    "character generator",
-    "avatar creator",
-    "pixel graphics",
-    "8-bit graphics"
+    "open source avatar",
+    "free avatar library",
+    "pixel art avatars",
+    "8-bit characters",
+    "avatar generator",
+    "character library",
+    "pixel art library",
+    "open source graphics",
+    "free character sprites",
+    "avatar API",
+    "pixel character generator",
+    "retro avatars",
+    "8-bit avatar maker",
+    "open source art",
+    "free pixel art",
+    "avatar components",
+    "character customization",
+    "pixel graphics library"
   ],
   authors: [{ name: "snjyor", url: "https://github.com/snjyor/pixel_nft" }],
   creator: "snjyor",
@@ -55,22 +58,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://pixelnft.top",
-    title: "Pixel Art NFT Generator - Create Unique 8-bit Characters",
-    description: "Create stunning pixel art NFT characters with 1 million unique combinations. Free online pixel art generator with customizable parts and instant download.",
-    siteName: "Pixel Art NFT Generator",
+    title: "Open Source Avatar Library - Free Pixel Art Characters",
+    description: "Free and open source pixel art avatar library. Generate customizable 8-bit characters for your projects. MIT licensed and developer-friendly.",
+    siteName: "Open Avatar Library",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Pixel Art NFT Generator Preview",
+        alt: "Open Source Avatar Library Preview",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pixel Art NFT Generator - Create Unique 8-bit Characters",
-    description: "Create stunning pixel art NFT characters with 1 million unique combinations. Free online generator!",
+    title: "Open Source Avatar Library - Free Pixel Art Characters",
+    description: "Free and open source pixel art avatar library with customizable 8-bit characters. MIT licensed for developers!",
     site: "@jinghui30",
     creator: "@jinghui30",
     images: ["/og-image.png"],
@@ -86,7 +89,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  category: "Digital Art",
+  category: "Open Source Software",
 };
 
 // Global type declarations for Google Analytics
@@ -106,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
